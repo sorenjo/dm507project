@@ -8,7 +8,10 @@ public class PQHeap implements PQ{
     }
 
     public Element extractMin(){
-        return heap.get(0);
+        int min = heap.get(0);
+        heap.set(0, heap.remove(heap.size()-1));
+        maxHeapify();
+        return min;
     }
 
     public void insert(Element e){
