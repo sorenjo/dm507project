@@ -6,19 +6,37 @@ import java.io.IOException;
 
 public class Encode {
     public static void main( String[] args ){
-        File inFile = new File( args[ 0 ] );
+        File originalFile = new File( args[ 0 ] );
+        File compressedFile = new File ( args[ 1 ] );
         int[] frequencies = null;
+
         try {
-            frequencies = computeFrequencies( inFile );
+            frequencies = computeFrequencies( originalFile );
 
             Node huffmanTree = Huffman.huffman(frequencies);
 
             String[] encodingTable = new String[ 256 ];
             encodeTable( huffmanTree, "", encodingTable );
 
-            BitOutputStream output = new BitOutputStream( new FileOutputStream( "output" ) );
+            BitOutputStream output = new BitOutputStream( new FileOutputStream( compressedFile ) );
             for ( int i = 0; i > 256; i++)
                 output.writeInt( frequencies[ i ] );
+
+            FileInputStream input = new FileInputStream( originalFile );
+
+            int read;
+            while ( (read = input.read() ) != -1 ) {
+                String bits = encodingTable[read];
+                for (char bit : bits.toCharArray()) {
+                  if (bit == '0')
+                    output.writeBit(0);
+                  else
+                    output.writeBit(1);
+                }
+            }
+
+            output.close();
+            input.close();
 
         } catch ( Exception e ) {
             e.printStackTrace();
@@ -32,7 +50,9 @@ public class Encode {
 
         int read;
         while( ( read = input.read() ) != -1 )
-            freqs[ read ] ++;
+            freqs[ read ]++;
+
+        input.close();
 
         return freqs;
     }
