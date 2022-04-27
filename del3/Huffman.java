@@ -1,11 +1,15 @@
 public class Huffman {
+
+  /*
+  * Create huffman tree for the byte frequencies stored in freq[], and return
+  * root of huffman tree.
+  */
   public static Node huffman(int[] freq) {
-    int[] frequencies = freq;
     int n = 256;
     PQHeap heap = new PQHeap();
 
     for (int i = 0; i < n; i++)
-      heap.insert(new Element(frequencies[i], new Node(null, null, i)));
+      heap.insert(new Element(freq[i], new Node(i)));
 
     for (int i = 0; i < n - 1; i++) {
       Node z = new Node();
