@@ -19,7 +19,7 @@ public class Encode {
             encodeTable( huffmanTree, "", encodingTable );
 
             BitOutputStream output = new BitOutputStream( new FileOutputStream( compressedFile ) );
-            for ( int i = 0; i > 256; i++)
+            for ( int i = 0; i < 256; i++)
                 output.writeInt( frequencies[ i ] );
 
             FileInputStream input = new FileInputStream( originalFile );
@@ -28,8 +28,8 @@ public class Encode {
             while ( (read = input.read() ) != -1 ) {
                 String bits = encodingTable[read];
                 for (char bit : bits.toCharArray()) {
-                  int b = bit == '0' ? 0 : 1;
-                  output.writeBit(b);
+                    int b = bit == '0' ? 0 : 1;
+                    output.writeBit(b);
                 }
             }
 
