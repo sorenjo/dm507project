@@ -28,10 +28,8 @@ public class Encode {
             while ( (read = input.read() ) != -1 ) {
                 String bits = encodingTable[read];
                 for (char bit : bits.toCharArray()) {
-                  if (bit == '0')
-                    output.writeBit(0);
-                  else
-                    output.writeBit(1);
+                  int b = bit == '0' ? 0 : 1;
+                  output.writeBit(b);
                 }
             }
 
@@ -43,6 +41,9 @@ public class Encode {
         }
     }
 
+    /*
+    * Computes the frequencies of every byte in file and returns them in an array
+    */
     private static int[] computeFrequencies( File file ) throws FileNotFoundException, IOException {
         int[] freqs = new int[ 256 ];
 
@@ -57,6 +58,11 @@ public class Encode {
         return freqs;
     }
 
+    /*
+    * Recursively find the prefix code of every leaf in a huffman tree,
+    * and save them in array String[] table, where the index is the numerical
+    * representation of the byte stored in the leaf.
+    */
     private static void encodeTable( Node x, String currentPath, String[] table ) {
         if ( x != null ) {
             encodeTable( x.left, currentPath + "0", table );
